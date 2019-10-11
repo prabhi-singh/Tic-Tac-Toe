@@ -1,120 +1,149 @@
-#include<bits/stdc++.h>
+#include <iostream>
 using namespace std;
-#define C 1
-#define H 2
-#define side 3
-#define cmove 'O'
-#define hmove 'X'
-void display(char a[][side])
-{
-    cout<<endl<<endl;
-    cout<<"\t\t\t"<<a[0][0]<<" | "<<a[0][1]<<" | "<<a[0][2]<<endl;
-    cout<<"\t\t\t--------------\n";
-    cout<<"\t\t\t"<<a[1][0]<<" | "<<a[1][1]<<" | "<<a[1][2]<<endl;
-    cout<<"\t\t\t--------------\n";
-    cout<<"\t\t\t"<<a[2][0]<<" | "<<a[2][1]<<" | "<<a[2][2]<<endl;
-    return;
-}
-void init(char a[][side],int b[])
-{
-    srand(time(NULL));
-    for(int i=0;i<side;++i)
-    {
-        for(int j=0;j<side;++j)
-            a[i][j]=' ';
-    }
-    for(int i=0;i<(side*side);++i)
-        b[i]=i;
-    random_shuffle(b,b+(side*side));
-    return;
-}
-void winner(int turn)
-{
-    if(turn==C)
-    {
-        cout<<"Computer wins!!"<<endl;
-    }
-    else
-    {
-        cout<<"Human wins!!"<<endl;
-    }
-    return;
-}
-bool row(char a[][side])
-{
-    for(int i=0;i<side;++i)
-    {
-        if(a[i][0]==a[i][1] && a[i][1]==a[i][2] && a[i][0]!=' ')
-            return (true);
-    }
-    return (false);
-}
-bool column(char a[][side])
-{
-    for(int i=0;i<side;++i)
-    {
-        if(a[0][i]==a[1][i] && a[1][i]==a[2][i] && a[0][i]!=' ')
-            return (true);
-    }
-    return (false);
-}
-bool diagonal(char a[][side])
-{
-    if(a[0][0]==a[1][1] && a[1][1]==a[2][2] && a[0][0]!=' ')
-        return (true);
-    if(a[0][2]==a[1][1] && a[1][1]==a[2][0] && a[0][2]!=' ')
-        return (true);
-    return (false);
-}
-bool st(char a[][side])
-{
-    return(row(a)||column(a)||diagonal(a));
-}
-void TicTacToe(int turn)
-{
-    char a[side][side];
-    int b[side*side];
-    init(a,b);
-    int move=0,x,y;
-    while(st(a)==false && move!=(side*side))
-    {
-        if(turn == C)
-        {
-            x=b[move]/side;
-            y=b[move]%side;
-            a[x][y]=cmove;
-            display(a);
-            ++move;
-            turn=H;
-        }
-        else if(turn == H)
-        {
-            x=b[move]/side;
-            y=b[move]%side;
-            a[x][y]=hmove;
-            display(a);
-            ++move;
-            turn=C;
-        }
-    }
-    if(st(a)==false && move==(side*side))
-    {
-        cout<<"It's a tie!!"<<endl;
-    }
-    else
-    {
-        if(turn==C)
-            turn=H;
-        else if(turn==H)
-            turn=C;
-        winner(turn);
-    }
-    return;
-}
+
+char square[10] = {'o','1','2','3','4','5','6','7','8','9'};
+
+int checkwin();
+void board();
+
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    TicTacToe(C); //The computer starts the game
-    return (0);
+	int player = 1,i,choice;
+
+    char mark;
+    do
+    {
+        board();
+        player=(player%2)?1:2;
+
+        cout << "Player " << player << ", enter a number:  ";
+        cin >> choice;
+
+        mark=(player == 1) ? 'X' : 'O';
+
+        if (choice == 1 && square[1] == '1')
+
+            square[1] = mark;
+        else if (choice == 2 && square[2] == '2')
+
+            square[2] = mark;
+        else if (choice == 3 && square[3] == '3')
+
+            square[3] = mark;
+        else if (choice == 4 && square[4] == '4')
+
+            square[4] = mark;
+        else if (choice == 5 && square[5] == '5')
+
+            square[5] = mark;
+        else if (choice == 6 && square[6] == '6')
+
+            square[6] = mark;
+        else if (choice == 7 && square[7] == '7')
+
+            square[7] = mark;
+        else if (choice == 8 && square[8] == '8')
+
+            square[8] = mark;
+        else if (choice == 9 && square[9] == '9')
+
+            square[9] = mark;
+        else
+        {
+            cout<<"Invalid move ";
+
+            player--;
+            cin.ignore();
+            cin.get();
+        }
+        i=checkwin();
+
+        player++;
+    }while(i==-1);
+    board();
+    if(i==1)
+
+        cout<<"==>\aPlayer "<<--player<<" win ";
+    else
+        cout<<"==>\aGame draw";
+
+    cin.ignore();
+    cin.get();
+    return 0;
 }
+
+/*********************************************
+    FUNCTION TO RETURN GAME STATUS
+    1 FOR GAME IS OVER WITH RESULT
+    -1 FOR GAME IS IN PROGRESS
+    O GAME IS OVER AND NO RESULT
+**********************************************/
+
+int checkwin()
+{
+    if (square[1] == square[2] && square[2] == square[3])
+
+        return 1;
+    else if (square[4] == square[5] && square[5] == square[6])
+
+        return 1;
+    else if (square[7] == square[8] && square[8] == square[9])
+
+        return 1;
+    else if (square[1] == square[4] && square[4] == square[7])
+
+        return 1;
+    else if (square[2] == square[5] && square[5] == square[8])
+
+        return 1;
+    else if (square[3] == square[6] && square[6] == square[9])
+
+        return 1;
+    else if (square[1] == square[5] && square[5] == square[9])
+
+        return 1;
+    else if (square[3] == square[5] && square[5] == square[7])
+
+        return 1;
+    else if (square[1] != '1' && square[2] != '2' && square[3] != '3' 
+                    && square[4] != '4' && square[5] != '5' && square[6] != '6' 
+                  && square[7] != '7' && square[8] != '8' && square[9] != '9')
+
+        return 0;
+    else
+        return -1;
+}
+
+
+/*******************************************************************
+     FUNCTION TO DRAW BOARD OF TIC TAC TOE WITH PLAYERS MARK
+********************************************************************/
+
+
+void board()
+{
+    system("cls");
+    cout << "\n\n\tTic Tac Toe\n\n";
+
+    cout << "Player 1 (X)  -  Player 2 (O)" << endl << endl;
+    cout << endl;
+
+    cout << "     |     |     " << endl;
+    cout << "  " << square[1] << "  |  " << square[2] << "  |  " << square[3] << endl;
+
+    cout << "_____|_____|_____" << endl;
+    cout << "     |     |     " << endl;
+
+    cout << "  " << square[4] << "  |  " << square[5] << "  |  " << square[6] << endl;
+
+    cout << "_____|_____|_____" << endl;
+    cout << "     |     |     " << endl;
+
+    cout << "  " << square[7] << "  |  " << square[8] << "  |  " << square[9] << endl;
+
+    cout << "     |     |     " << endl << endl;
+}
+
+/*******************************************************************
+                END OF PROJECT
+********************************************************************/
